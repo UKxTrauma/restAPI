@@ -11,29 +11,29 @@ exports.addMovie = async (req, res) => {
             console.log("no title or actor found")
             res.status(400).send({error: "no title or actor found"})
         }
-    } catch (e) {
+    } catch (error) {
         console.log("error in add movie")
         res.status(500).send({error:"internal server error"})
-        console.log(e)
+        console.log(error)
 
     }
 }
 
-exports.listMovie = async (req, res) => {
+exports.listMovies = async (req, res) => {
     try {
         let movieList = await Movie.find({});
         if (movieList.length > 0){
-            console.log("inside listMovie")
+            console.log("inside listMovies")
             res.status(200).send({movieList});
         }
         else {
             console.log("Nothing to display")
-            res.status(400).send({error: "request failed"})
+            res.status(400).send({error: "request failed, no movies to display"})
         }
-    } catch (e) {
-        console.log("error in listMovie")
+    } catch (error) {
+        console.log("error in listMovies")
         res.status(500).send({error:"internal server error"})
-        console.log(e)
+        console.log(error)
     }
 }
 
@@ -49,10 +49,10 @@ exports.deleteMovie = async (req, res) => {
             console.log("Nothing to delete")
             res.status(400).send({error: "request failed"})
         }
-    } catch (e) {
+    } catch (error) {
         console.log("error in deleteMovie")
         res.status(500).send({error:"internal server error"})
-        console.log(e)
+        console.log(error)
     }
 }
 
@@ -67,42 +67,22 @@ exports.deleteMovies = async (req, res) => {
             console.log("Nothing to delete")
             res.status(400).send({error: "request failed"})
         }
-    } catch (e) {
+    } catch (error) {
         console.log("error in deleteMovies")
         res.status(500).send({error:"internal server error"})
-        console.log(e)
+        console.log(error)
     }
 }
 
-
-// exports.deleteMovies = async () => {
-//     try {
-//         return await Movie.deleteMany({})
-//     } catch (error) {
-//         console.log("Error within deleteMovies\n\n"+error)
-//     }
-// }
-
-// exports.updateMovie = async (movieObject, updateMovieObject) => {
-//     try {
-//         return await Movie.updateOne(movieObject, updateMovieObject)
-//     } catch (error) {
-//         console.log("Error within updateMovie\n\n"+error)
-//     }
-// }
-
-// exports.findMoviesCast = async (actorObject) => {
-//     try {
-//         return await Movie.find(actorObject)
-//     } catch (error) {
-//         console.log("Error within findMoviesCast\n\n"+error)
-//     }
-// }
-
-// exports.findMoviesTitle = async (titleObject) => {
-//     try {
-//         return await Movie.findOne(titleObject)
-//     } catch (error) {
-//         console.log("Error within findMoviesTitle\n\n"+error)
-//     }
-// }
+exports.editMovie = async (req, res) =>
+{
+    try
+    {
+        await Movie.updateOne({ title: req.body.title, actor: req.body.actor }, { title: req.body.newT, actor: req.body.newA })
+        res.status(200).send(await Movie.find({}))
+    } catch (error)
+    {
+        res.status(200).send(console.log("Failed to list items"))
+        console.log(error)
+    }
+}
