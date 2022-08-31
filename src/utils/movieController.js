@@ -37,13 +37,43 @@ exports.listMovie = async (req, res) => {
     }
 }
 
-// exports.deleteMovie = async () => {
-//     try {
-//         return await Movie.deleteOne(movieObject)
-//     } catch (error) {
-//         console.log("Error within deleteMovie\n\n"+error)
-//     }
-// }
+exports.deleteMovie = async (req, res) => {
+    try {
+        let movieList = await Movie.find({})
+        console.log(movieList)
+        if ((req.body.title && req.body.actor) && movieList.length > 0){
+            await Movie.deleteOne({ title: req.body.title, actor: req.body.actor })
+            res.status(200).send(await Movie.find({}))
+        }
+        else {
+            console.log("Nothing to delete")
+            res.status(400).send({error: "request failed"})
+        }
+    } catch (e) {
+        console.log("error in deleteMovie")
+        res.status(500).send({error:"internal server error"})
+        console.log(e)
+    }
+}
+
+exports.deleteMovies = async (req, res) => {
+    try {
+        let movieList = await Movie.find({})
+        if (movieList.length > 0){
+            await Movie.deleteMany({movieList})
+            res.status(200).send("Contents deleted")
+        }
+        else {
+            console.log("Nothing to delete")
+            res.status(400).send({error: "request failed"})
+        }
+    } catch (e) {
+        console.log("error in deleteMovies")
+        res.status(500).send({error:"internal server error"})
+        console.log(e)
+    }
+}
+
 
 // exports.deleteMovies = async () => {
 //     try {

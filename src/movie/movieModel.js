@@ -12,6 +12,6 @@ const movieSchema = new mongoose.Schema({
     },
 })
 
-const Movie = mongoose.model("Netflix", movieSchema);
+const Movie = mongoose.model("Entries", movieSchema);
 
 module.exports = Movie
