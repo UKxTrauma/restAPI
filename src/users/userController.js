@@ -7,7 +7,6 @@ exports.addUser = async (req, res) => {
             const newUser = new Users(req.body);
             const token = await newUser.generateAuthToken();
             await newUser.save();
-            // await Users.create({ name: req.body.name, email: req.body.email, password: req.body.password, token })
             res.status(201).send({ user: newUser.name, token })
         } else {
             console.log("no name, email and/or password entered")
@@ -41,52 +40,18 @@ exports.listUsers = async (req, res) => {
     }
 }
 
-
-exports.userDeleteOne = async (req, res) => {
-    const { email, password } = req.body;
+exports.userDelete = async (req, res) => {
     try {
-        const user = await Users.filterByCredentials(email, password)
-        if (user) {
-        await Users.deleteOne({ email: user.email, password: user.password })
-        res.status(200).send(await Users.find({}))
+        if (req.user) {
+        await Users.findByIdAndDelete({ _id : req.user._id })
+        res.status(200).send("Account deleted")
         } else {
-            console.log("Nothing to delete")
-            res.status(400).send({error: "request failed"})
+            console.log("Please log in")
+            res.status(400).send({error: "request failed, please log in"})
         }
     } catch (error) {
         console.log("error in userDeleteOne")
         res.status(500).send({error:"internal server error"})
-        console.log(error)
-    }
-}
-
-exports.userDeleteMany = async (req, res) => {
-    try {
-        let userList = await Users.find({})
-        if (userList.length > 0){
-            await Users.deleteMany({userList})
-            res.status(200).send("Contents deleted")
-        }
-        else {
-            console.log("Nothing to delete")
-            res.status(400).send({error: "request failed"})
-        }
-    } catch (error) {
-        console.log("error in userDeleteMany")
-        res.status(500).send({error:"internal server error"})
-        console.log(error)
-    }
-}
-
-exports.userEdit = async (req, res) => {
-    const { email, password } = req.body;
-    console.log(req.body)
-    try{
-        const user = await Users.filterByCredentials(email, password)
-        await Users.updateOne({ name: req.body.name, email: user.email, password: user.password }, { name: req.body.newName, email: req.body.newEmail, password: req.body.newPass })
-        res.status(200).send(await Users.find({}))
-    } catch (error) {
-        res.status(200).send(console.log("Failed to list items"))
         console.log(error)
     }
 }
