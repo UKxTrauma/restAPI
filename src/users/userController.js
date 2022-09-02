@@ -63,7 +63,7 @@ exports.nameEdit = async (req, res) => {
             res.status(200).send(await Users.find({name: req.body.name}))
         } 
     } catch (error) {
-            res.status(200).send(console.log("Failed to update items"))
+            res.status(400).send(console.log("Failed to update items"))
             console.log(error)
     }
 }
@@ -75,7 +75,7 @@ exports.emailEdit = async (req, res) => {
             res.status(200).send(await Users.find({email: req.body.email}))
         } 
     } catch (error) {
-            res.status(200).send(console.log("Failed to update items"))
+            res.status(400).send(console.log("Failed to update items"))
             console.log(error)
     }
 }
@@ -87,7 +87,7 @@ exports.passwordEdit = async (req, res) => {
             res.status(200).send(await Users.find({password: req.body.password}))
         } 
     } catch (error) {
-            res.status(200).send(console.log("Failed to update items"))
+            res.status(400).send(console.log("Failed to update items"))
             console.log(error)
     }
 }

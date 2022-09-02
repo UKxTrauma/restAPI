@@ -82,7 +82,7 @@ exports.editMovie = async (req, res) =>
         res.status(200).send(await Movie.find({}))
     } catch (error)
     {
-        res.status(200).send(console.log("Failed to list items"))
+        res.status(400).send(console.log("Failed to list items"))
         console.log(error)
     }
 }
